@@ -1,0 +1,60 @@
+/* =========================================
+   GLOBAL & TYPOGRAPHY
+========================================= */
+body { background-color: #232323; color: #E6E6E6; font-family: "Segoe UI", Tahoma, sans-serif; font-size: 13px; margin: 12px 16px; }
+p.section-label { font-weight: 600; color: #CCCCCC; margin: 0 0 8px 0; }
+.ratio-text { font-size: 11px; color: #2D8CFF; margin: 4px 0 0 0; font-style: italic; text-align: center; }
+hr { border: 0; border-top: 1px solid #333333; margin: 12px 0; }
+.section { margin-bottom: 16px; }
+
+/* =========================================
+   LAYOUT & GRIDS
+========================================= */
+/* Tightened margin-top from 15px down to 8px */
+.dimensions-layout { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; margin-bottom: 10px; }
+.dim-column { flex: 1; display: flex; flex-direction: column; }
+.dim-arrow { display: flex; align-items: center; justify-content: center; margin-bottom: 10px; flex: 0 0 auto; }
+.dim-arrow svg { width: 20px; height: 20px; }
+
+.load-btn-group { display: flex; gap: 8px; margin-bottom: 10px; }
+.load-btn-group button { margin-bottom: 0; flex: 1; }
+.preset-row { display: flex; gap: 6px; margin-bottom: 6px; }
+.checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+
+/* =========================================
+   INPUTS, DROPDOWNS & CHECKBOXES
+========================================= */
+label { font-size: 11px; color: #AAAAAA; margin-bottom: 4px; display: block; }
+.dropdown-label { display: block; margin-top: 6px; }
+input[type="number"], select { background-color: #1A1A1A; color: #FFFFFF; border: 1px solid #444444; padding: 6px 8px; border-radius: 3px; width: 100%; box-sizing: border-box; outline: none; transition: border 0.2s ease; }
+input[type="number"]:focus, select:focus { border: 1px solid #2D8CFF; }
+/* Tightened dropdown bottom margin */
+select { margin-bottom: 8px; }
+input[type="checkbox"] { margin: 0; cursor: pointer; }
+.checkbox-row label { font-size: 12px; color: #E6E6E6; cursor: pointer; margin: 0; }
+
+/* =========================================
+   BUTTONS
+========================================= */
+button { font-family: inherit; border-radius: 3px; border: none; cursor: pointer; transition: background-color 0.2s ease; }
+.primary-btn { background-color: #0064FA; color: #FFFFFF; padding: 10px; font-weight: 600; width: 100%; font-size: 14px; }
+.primary-btn:hover { background-color: #0050C8; }
+.secondary-btn { background-color: #3A3A3A; color: #FFFFFF; width: 100%; padding: 6px; font-size: 11px; border: 1px solid #555555; margin-bottom: 4px; }
+.secondary-btn:hover { background-color: #4A4A4A; }
+.preset-btn { background-color: #2A2A2A; color: #CCCCCC; padding: 6px 8px; font-size: 11px; flex: 1; border: 1px solid #444444; }
+.preset-btn:hover { background-color: #3A3A3A; color: #FFFFFF; }
+
+/* =========================================
+   EXECUTE SECTION & STATUS
+========================================= */
+.final-multiplier { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.final-multiplier label { font-weight: bold; font-size: 14px; color: #FFFFFF; margin:0; }
+.final-multiplier input { width: 80px; font-weight: bold; font-size: 14px; text-align: center; }
+#statusMessage { margin-top: 10px; font-style: italic; color: #A0A0A0; text-align: center; margin-bottom: 0; }
+
+/* =========================================
+   FOOTER / CREDITS
+========================================= */
+.footer { text-align: center; margin-top: 15px; }
+.footer a { color: #555555; font-size: 10px; text-decoration: none; transition: color 0.2s ease; }
+.footer a:hover { color: #888888; text-decoration: underline; }

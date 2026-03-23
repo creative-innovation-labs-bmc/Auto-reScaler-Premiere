@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Auto reScaler</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        
+        <div class="section">
+            <p class="section-label">1. Source Dimensions</p>
+            
+            <button id="btnLoadSeq" class="secondary-btn">Load Sequence Info</button>
+            
+            <div class="dimensions-layout">
+                <div class="dim-column">
+                    <label>Current Width</label>
+                    <input type="number" id="currentWidth" value="1920">
+                    
+                    <label style="margin-top: 8px;">Current Height</label>
+                    <input type="number" id="currentHeight" value="1080">
+                    
+                    <p id="currentRatio" class="ratio-text">Aspect Ratio: 16:9</p>
+                </div>
+
+                <div class="dim-arrow">
+                    <svg id="dynamicArrow" viewBox="0 0 24 24" fill="none" stroke="#666666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+
+                <div class="dim-column">
+                    <label>Target Width</label>
+                    <input type="number" id="targetWidth" value="3072">
+                    
+                    <label style="margin-top: 8px;">Target Height</label>
+                    <input type="number" id="targetHeight" value="1728">
+                    
+                    <p id="targetRatio" class="ratio-text">Aspect Ratio: 16:9</p>
+                </div>
+            </div>
+
+            <div class="checkbox-row" style="justify-content: center; margin-bottom: 12px; margin-top: 8px;">
+                <input type="checkbox" id="lockRatio" checked>
+                <label for="lockRatio" style="color:#2D8CFF; font-weight:600;">Lock Aspect Ratio</label>
+            </div>
+            
+            <div class="preset-row">
+                <button class="preset-btn" data-w="1920" data-h="1080">HD</button>
+                <button class="preset-btn" data-w="2560" data-h="1440">QHD 2K</button>
+                <button class="preset-btn" data-w="3072" data-h="1728">3K</button>
+            </div>
+            <div class="preset-row">
+                <button class="preset-btn" data-w="3840" data-h="2160">UHD 4K</button>
+                <button class="preset-btn" data-w="4096" data-h="2160">DCI 4K</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <p class="section-label">2. Scaling Options</p>
+            
+            <label class="dropdown-label">Apply To:</label>
+            <select id="scopeSelect">
+                <option value="all">Entire Sequence</option>
+                <option value="selected">Selected Clips Only</option>
+            </select>
+
+            <div class="checkbox-row">
+                <input type="checkbox" id="duplicateSeq">
+                <label for="duplicateSeq">Duplicate sequence as backup before scaling</label>
+            </div>
+
+            <div class="checkbox-row" style="margin-bottom: 12px;">
+                <input type="checkbox" id="renameSeq" checked>
+                <label for="renameSeq">Change Seq. Resolution & Auto-Rename</label>
+            </div>
+
+            <label class="dropdown-label">Naming Convention:</label>
+            <select id="namingSelect">
+                <option value="suffix" selected>Add as Suffix (Name Res)</option>
+                <option value="prefix">Add as Prefix (Res Name)</option>
+            </select>
+
+            <div class="checkbox-row">
+                <input type="checkbox" id="skipKeyframes" checked>
+                <label for="skipKeyframes">Skip clips with motion keyframes</label>
+            </div>
+
+            <div class="checkbox-row" style="margin-bottom: 12px;">
+                <input type="checkbox" id="markOverScaled" checked>
+                <label for="markOverScaled">Mark clips scaled over 100% (Red)</label>
+            </div>
+            
+            <button id="btnClearMarkers" class="secondary-btn" style="width: auto; padding: 4px 10px; margin-left: 24px; margin-bottom: 12px;">Clear Red Markers</button>
+        </div>
+
+        <hr>
+
+        <div class="execute-section">
+            <div class="final-multiplier">
+                <label>Multiplier:</label>
+                <input type="number" id="multiplierInput" value="1.6" step="0.01" min="0.1">
+            </div>
+            <button id="btnScale" class="primary-btn">Process Sequence</button>
+            <p id="statusMessage">Ready.</p>
+        </div>
+
+        <div class="footer">
+            <a href="#" id="creditLink">Auto reScaler v1.0.0 | Created by Fooch</a>
+        </div>
+
+    </div>
+    
+    <script src="js/CSInterface.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
