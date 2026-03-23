@@ -4,6 +4,8 @@
 
 Whether you are upscaling a 1080p edit to 4K, Auto reScaler handles the math, protects your keyframes, and safely backs up your work—all in one click.
 
+<img width="306" height="813" alt="Auto_reScaler Screenshot" src="https://github.com/user-attachments/assets/76e75b29-4bdb-4989-a409-6cabd2896893" />
+
 ---
 
 ## ✨ Key Features
