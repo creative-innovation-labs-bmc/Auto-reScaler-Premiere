@@ -8,6 +8,7 @@ var tarW = document.getElementById("targetWidth");
 var tarH = document.getElementById("targetHeight");
 var tarRatio = document.getElementById("targetRatio");
 var multiplierInput = document.getElementById("multiplierInput");
+var scaleMatch = document.getElementById("scaleMatch"); 
 var lockRatio = document.getElementById("lockRatio");
 var scopeSelect = document.getElementById("scopeSelect");
 var btnScale = document.getElementById("btnScale");
@@ -20,15 +21,18 @@ curH.addEventListener("focus", function() { targetFocus = false; });
 tarW.addEventListener("focus", function() { targetFocus = true; });
 tarH.addEventListener("focus", function() { targetFocus = true; });
 
-// --- MATH & UI UTILITIES ---
+// --- SMART ARROW LOGIC (Now respects Match dropdown) ---
 function updateArrow() {
-    var cw = parseFloat(curW.value);
-    var tw = parseFloat(tarW.value);
-    if (isNaN(cw) || isNaN(tw)) return;
+    var matchMode = scaleMatch.value; // "width" or "height"
+    
+    var currentVal = matchMode === "width" ? parseFloat(curW.value) : parseFloat(curH.value);
+    var targetVal = matchMode === "width" ? parseFloat(tarW.value) : parseFloat(tarH.value);
+    
+    if (isNaN(currentVal) || isNaN(targetVal)) return;
 
-    if (tw > cw) { // Scale Up (Right)
+    if (targetVal > currentVal) { // Scale Up
         dynamicArrow.innerHTML = '<polyline points="9 18 15 12 9 6"></polyline>';
-    } else if (tw < cw) { // Scale Down (Left)
+    } else if (targetVal < currentVal) { // Scale Down
         dynamicArrow.innerHTML = '<polyline points="15 18 9 12 15 6"></polyline>';
     } else { // Equal
         dynamicArrow.innerHTML = '<line x1="6" y1="10" x2="18" y2="10"></line><line x1="6" y1="14" x2="18" y2="14"></line>';
@@ -49,6 +53,22 @@ function updateRatios() {
     updateArrow();
 }
 
+// --- MASTER MULTIPLIER CALCULATOR ---
+function calculateMultiplier() {
+    var cw = parseFloat(curW.value);
+    var ch = parseFloat(curH.value);
+    var tw = parseFloat(tarW.value);
+    var th = parseFloat(tarH.value);
+    
+    if (isNaN(cw) || isNaN(ch) || isNaN(tw) || isNaN(th) || cw === 0 || ch === 0) return;
+
+    if (scaleMatch.value === "width") {
+        multiplierInput.value = parseFloat((tw / cw).toFixed(4));
+    } else {
+        multiplierInput.value = parseFloat((th / ch).toFixed(4));
+    }
+}
+
 // --- TWO-WAY BINDING & RATIO LOCK ---
 function updateFromMultiplier() {
     var m = parseFloat(multiplierInput.value);
@@ -61,11 +81,10 @@ function updateFromMultiplier() {
 
 function updateFromTargetW() {
     if (lockRatio.checked && parseFloat(curW.value) > 0) {
-        var ratio = parseFloat(curW.value) / parseFloat(curH.value);
-        tarH.value = Math.round(parseFloat(tarW.value) / ratio);
+        var ratio = parseFloat(curH.value) / parseFloat(curW.value);
+        tarH.value = Math.round(parseFloat(tarW.value) * ratio);
     }
-    var cw = parseFloat(curW.value);
-    if (!isNaN(cw) && cw > 0) multiplierInput.value = parseFloat((parseFloat(tarW.value) / cw).toFixed(4));
+    calculateMultiplier();
     updateRatios();
 }
 
@@ -74,8 +93,7 @@ function updateFromTargetH() {
         var ratio = parseFloat(curW.value) / parseFloat(curH.value);
         tarW.value = Math.round(parseFloat(tarH.value) * ratio);
     }
-    var cw = parseFloat(curW.value);
-    if (!isNaN(cw) && cw > 0) multiplierInput.value = parseFloat((parseFloat(tarW.value) / cw).toFixed(4));
+    calculateMultiplier();
     updateRatios();
 }
 
@@ -86,19 +104,32 @@ tarW.addEventListener("input", updateFromTargetW);
 tarH.addEventListener("input", updateFromTargetH);
 multiplierInput.addEventListener("input", updateFromMultiplier);
 
+// Ensure the arrow updates immediately if you change the dropdown
+scaleMatch.addEventListener("change", function() {
+    calculateMultiplier();
+    updateArrow();
+});
+
 // --- PRESET BUTTONS ---
 document.querySelectorAll(".preset-btn").forEach(function(btn) {
     btn.addEventListener("click", function() {
         var w = this.getAttribute("data-w");
         var h = this.getAttribute("data-h");
 
+        // SMART TOGGLE: Vertical/social format auto-switches to Height
+        if (parseInt(h) > parseInt(w)) {
+            scaleMatch.value = "height";
+            lockRatio.checked = false; 
+        } else {
+            scaleMatch.value = "width";
+        }
+
         if (targetFocus) {
             tarW.value = w; tarH.value = h;
             updateFromTargetW(); 
         } else {
             curW.value = w; curH.value = h;
-            var tw = parseFloat(tarW.value);
-            if (!isNaN(tw) && tw > 0) multiplierInput.value = parseFloat((tw / w).toFixed(4));
+            calculateMultiplier();
             updateRatios();
         }
     });
@@ -110,7 +141,8 @@ document.getElementById("btnLoadSeq").addEventListener("click", function() {
         if (result && result !== "null") {
             var dims = result.split(",");
             curW.value = dims[0]; curH.value = dims[1];
-            updateFromMultiplier(); 
+            calculateMultiplier(); 
+            updateRatios();
         } else {
             document.getElementById("statusMessage").innerText = "Error: Please open a sequence.";
         }
@@ -125,7 +157,7 @@ document.getElementById("btnClearMarkers").addEventListener("click", function() 
     });
 });
 
-// --- DYNAMIC BUTTON TEXT (MAGIC HOVER) ---
+// --- DYNAMIC BUTTON TEXT ---
 function refreshButtonText() {
     if (scopeSelect.value === "selected") {
         csInterface.evalScript('getSelectedClipCount()', function(count) {
@@ -163,10 +195,10 @@ btnScale.addEventListener("click", function() {
 
 // Initialize math on load
 updateRatios(); 
+calculateMultiplier();
 
 // --- FOOTER EXTERNAL LINK ROUTER ---
 document.getElementById("creditLink").addEventListener("click", function(e) {
-    e.preventDefault(); // Prevents the panel from loading the website internally
-    // IMPORTANT: Change this URL to your actual portfolio or website!
+    e.preventDefault(); 
     csInterface.openURLInDefaultBrowser("https://www.linkedin.com/in/fooch"); 
 });
